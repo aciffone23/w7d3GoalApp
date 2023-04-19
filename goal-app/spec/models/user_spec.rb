@@ -59,6 +59,22 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe 'find by credentials' do 
+    context 'with proper credentials' do 
+      it 'should return the correct user' do 
+        FactoryBot.create(:user)
+        user2 = User.find_by(id: User.last.id)
+        expect(User.find_by_credentials(user2.username, 'password').username).to eq(user2.username)
+      end
+    end
 
+    context 'with improper credentials' do 
+      let(:user) { User.create(username: 'lilly_llama', password:'password') }
+      it 'should return nil' do 
+        expect(User.find_by_credentials('testone', 'notpassword')).to be nil
+      end
+    end
+
+  end
 
 end
